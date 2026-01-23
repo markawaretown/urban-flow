@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <title>URBAN FLOW | 都市を、呼吸する。</title>
+    <meta property="og:title" content="URBAN FLOW | 都市を、呼吸する。">
+    <meta property="og:description" content="中目黒と清澄白河。走ることで思考を研ぎ澄ます、大人のためのランニングステーション。">
+    <meta property="og:image" content="top.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Serif+JP:wght@200;400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --sub-text-color: #aaaaaa;
+            --font-en: 'Montserrat', sans-serif;
+            --font-jp: 'Noto Serif JP', serif;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Basic Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-jp);
+            line-height: 2.2;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            /* iPhone Safe Area support */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.6s var(--ease), transform 1.6s var(--ease);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Splash Screen --- */
+        #splash {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 1.2s var(--ease); cursor: pointer;
+        }
+        #splash span {
+            font-family: var(--font-en); font-size: 10px; letter-spacing: 0.6em;
+            border: 1px solid #333; padding: 20px 40px;
+            text-transform: uppercase;
+        }
+
+        /* --- Music Toggle --- */
+        #mute-toggle {
+            position: fixed; top: 30px; right: 30px; z-index: 1001;
+            background: none; border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; font-family: var(--font-en); font-size: 9px;
+            letter-spacing: 0.2em; padding: 10px 18px; cursor: pointer;
+            opacity: 0; transition: opacity 1s var(--ease), border 0.3s;
+            display: none;
+        }
+        #mute-toggle.visible { display: block; opacity: 1; }
+        #mute-toggle:hover { border-color: #fff; }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100svh; width: 100%; position: relative; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background-image: url('top.png');
+            background-size: cover; background-position: center;
+            filter: brightness(0.55) contrast(1.1);
+            transform: scale(1.1); transition: transform 4s var(--ease);
+        }
+        .hero.active .hero-bg { transform: scale(1); }
+        .hero-content { position: relative; z-index: 10; text-align: center; }
+        .hero-title {
+            font-family: var(--font-en); font-weight: 700;
+            font-size: clamp(44px, 12vw, 110px);
+            letter-spacing: 0.3em; line-height: 1.1;
+            margin-bottom: 24px; opacity: 0; transform: translateY(20px);
+            transition: opacity 2s var(--ease) 0.8s, transform 2s var(--ease) 0.8s;
+        }
+        .hero.active .hero-title { opacity: 1; transform: translateY(0); }
+        .hero-sub {
+            font-size: clamp(12px, 2vw, 16px); letter-spacing: 0.6em;
+            text-transform: uppercase;
+        }
+
+        /* --- Content Sections --- */
+        .section-concept {
+            padding: 200px 24px;
+            max-width: 900px; margin: 0 auto; text-align: center;
+        }
+        .concept-lead { font-size: clamp(20px, 4vw, 26px); margin-bottom: 60px; letter-spacing: 0.1em; }
+        .concept-body { color: var(--sub-text-color); font-size: 15px; font-weight: 300; }
+
+        .section-locations {
+            padding: 0 6vw 200px;
+            max-width: 1600px; margin: 0 auto;
+        }
+        .locations-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10vw; align-items: start;
+        }
+        @media (max-width: 820px) {
+            .section-locations { padding: 0 24px 120px; }
+            .locations-grid { grid-template-columns: 1fr; gap: 80px; }
+        }
+
+        .location-item { position: relative; }
+        @media (min-width: 821px) {
+            .location-item:nth-child(2) { margin-top: 150px; }
+        }
+
+        .loc-img-box {
+            width: 100%; aspect-ratio: 4 / 5; overflow: hidden; margin-bottom: 40px;
+            background-color: #1a1a1a;
+        }
+        .loc-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 1.5s var(--ease), filter 1.5s var(--ease);
+            filter: grayscale(30%) brightness(0.8);
+        }
+        .location-item:hover .loc-img { transform: scale(1.05); filter: grayscale(0%) brightness(1); }
+
+        .loc-meta { font-family: var(--font-en); font-size: 10px; letter-spacing: 0.4em; color: #555; display: block; margin-bottom: 20px; }
+        .loc-title { font-family: var(--font-en); font-size: clamp(24px, 3vw, 36px); letter-spacing: 0.15em; margin-bottom: 30px; }
+        .loc-desc { color: var(--sub-text-color); font-size: 14px; max-width: 420px; font-weight: 300; }
+
+        .cta-btn {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(150px);
+            background: var(--white); color: #000;
+            padding: 22px 70px;
+            font-family: var(--font-en); font-size: 11px; font-weight: 700;
+            text-decoration: none; letter-spacing: 0.4em;
+            transition: transform 0.8s var(--ease), background 0.3s;
+            z-index: 1000; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            white-space: nowrap;
+        }
+        .cta-btn.visible { transform: translateX(-50%) translateY(0); }
+        .cta-btn:hover { background: #d4d4d4; }
+        @media (max-width: 820px) {
+             .cta-btn { bottom: 30px; width: 85%; padding: 20px 0; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="mute-toggle" onclick="toggleMute()">
+        <span id="mute-icon">MUSIC ON</span>
+    </button>
+
+    <div id="splash" onclick="startExperience()">
+        <span>( ENTER WITH AUDIO )</span>
+    </div>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-bg"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">URBAN<br>FLOW</h1>
+                <p class="hero-sub reveal" style="transition-delay: 1.2s;">Refining the Rhythm.</p>
+            </div>
+        </section>
+
+        <section class="section-concept">
+            <div class="reveal">
+                <p class="concept-lead">静寂の中に、答えはある。</p>
+                <p class="concept-body">
+                    走ることは、単なる運動ではない。<br>
+                    ノイズを削ぎ落とし、クリエイティビティを再構築する儀式だ。<br><br>
+                    中目黒の静寂と、清澄白河の知性。<br>
+                    都市の鼓動と同期する、大人のためのサードプレイス。
+                </p>
+            </div>
+        </section>
+
+        <section class="section-locations">
+            <div class="locations-grid">
+                <div class="location-item reveal">
+                    <div class="loc-img-box">
+                        <img src="nakameguro.png" alt="Nakameguro" class="loc-img">
+                    </div>
+                    <span class="loc-meta">LOCATION 01</span>
+                    <h2 class="loc-title">NAKAMEGURO</h2>
+                    <p class="loc-desc">目黒川沿いのコンクリートと緑。都会の喧騒から一歩引いた、静謐なリズムがここにある。</p>
+                </div>
+                <div class="location-item reveal" style="transition-delay: 0.3s;">
+                    <div class="loc-img-box">
+                        <img src="kiyosumi.png" alt="Kiyosumi-shirakawa" class="loc-img">
+                    </div>
+                    <span class="loc-meta">LOCATION 02</span>
+                    <h2 class="loc-title">KIYOSUMI</h2>
+                    <p class="loc-desc">歴史ある倉庫街と現代アートの交差点。知性を刺激する、ストイックな直線コース。</p>
+                </div>
+            </div>
+        </section>
+
+        <div style="height: 200px;"></div>
+    </main>
+
+    <a href="#" class="cta-btn" id="cta">RESERVE NOW</a>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        
+        function startExperience() {
+            const splash = document.getElementById('splash');
+            const muteBtn = document.getElementById('mute-toggle');
+            
+            // Start Audio with Volume Fade-in
+            audio.volume = 0;
+            audio.play().catch(e => console.error("Audio error:", e));
+
+            const targetVol = 0.5;
+            const step = targetVol / 60; // 3 seconds (50ms * 60)
+            const fade = setInterval(() => {
+                if (audio.volume < targetVol) {
+                    audio.volume = Math.min(targetVol, audio.volume + step);
+                } else {
+                    clearInterval(fade);
+                }
+            }, 50);
+
+            // Hide Splash
+            splash.style.opacity = '0';
+            splash.style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                document.getElementById('hero').classList.add('active');
+                muteBtn.classList.add('visible');
+            }, 1200);
+        }
+
+        function toggleMute() {
+            const icon = document.getElementById('mute-icon');
+            if (audio.muted) {
+                audio.muted = false;
+                icon.innerText = "MUSIC ON";
+            } else {
+                audio.muted = true;
+                icon.innerText = "MUSIC OFF";
+            }
+        }
+
+        // Reveal Animation Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: "0px 0px -10% 0px" });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Fixed CTA Scroll Visibility
+        window.addEventListener('scroll', () => {
+            const cta = document.getElementById('cta');
+            if (window.scrollY > 400) cta.classList.add('visible');
+            else cta.classList.remove('visible');
+        }, { passive: true });
+    </script>
+</body>
+</html>
