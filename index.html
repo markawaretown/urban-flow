@@ -138,9 +138,68 @@
         .loc-title { font-family: var(--font-en); font-size: clamp(24px, 3vw, 36px); letter-spacing: 0.15em; margin-bottom: 30px; }
         .loc-desc { color: var(--sub-text-color); font-size: 14px; max-width: 420px; font-weight: 300; }
 
+        /* --- FAQ & Contact Section --- */
+        .section-faq {
+            padding: 0 6vw 200px;
+            max-width: 1000px; margin: 0 auto;
+        }
+        @media (max-width: 820px) {
+            .section-faq { padding: 0 24px 150px; }
+        }
+        
+        .faq-header { text-align: center; margin-bottom: 80px; }
+        .faq-meta { font-family: var(--font-en); font-size: 10px; letter-spacing: 0.4em; color: #555; display: block; margin-bottom: 20px; }
+        .faq-title { font-family: var(--font-en); font-size: clamp(24px, 4vw, 36px); letter-spacing: 0.15em; margin-bottom: 24px; }
+        .faq-desc { color: var(--sub-text-color); font-size: 13px; font-weight: 300; letter-spacing: 0.1em; }
+
+        .faq-list { border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .faq-item { border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        .faq-question {
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
+            padding: 32px 0; cursor: pointer; transition: opacity 0.3s;
+        }
+        .faq-question:hover { opacity: 0.7; }
+        
+        .faq-q-left { display: flex; align-items: flex-start; gap: 32px; flex: 1; }
+        .faq-number { font-family: var(--font-en); font-size: 11px; color: #555; letter-spacing: 0.2em; margin-top: 5px; }
+        .faq-q-text { font-size: 15px; color: var(--text-color); line-height: 1.8; letter-spacing: 0.05em; }
+
+        .faq-toggle { position: relative; width: 14px; height: 14px; flex-shrink: 0; }
+        .faq-toggle::before, .faq-toggle::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            background: #fff; transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+        }
+        .faq-toggle::before { width: 14px; height: 1px; transform: translate(-50%, -50%); }
+        .faq-toggle::after { width: 1px; height: 14px; transform: translate(-50%, -50%); }
+        .faq-item.open .faq-toggle::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.6s var(--ease); }
+        .faq-a-inner { padding: 0 0 40px 52px; }
+        .faq-a-text { color: var(--sub-text-color); font-size: 14px; line-height: 2.2; font-weight: 300; }
+        .faq-a-text strong { color: var(--text-color); font-weight: 400; }
+
+        @media (max-width: 640px) {
+            .faq-q-left { gap: 16px; flex-direction: column; }
+            .faq-number { margin-top: 0; }
+            .faq-a-inner { padding: 0 0 32px 0; margin-top: -10px; }
+        }
+
+        .contact-cta { text-align: center; margin-top: 120px; }
+        .contact-text { color: var(--sub-text-color); font-size: 12px; margin-bottom: 30px; letter-spacing: 0.1em; }
+        .contact-link {
+            display: inline-block;
+            font-family: var(--font-en); font-size: 11px; letter-spacing: 0.3em;
+            color: var(--text-color); text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 18px 48px; transition: background 0.4s var(--ease), color 0.4s var(--ease);
+        }
+        .contact-link:hover { background: var(--text-color); color: var(--bg-color); }
+
+        /* --- Floating CTA --- */
         .cta-btn {
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(150px);
-            background: var(--white); color: #000;
+            background: #ffffff; color: #000;
             padding: 22px 70px;
             font-family: var(--font-en); font-size: 11px; font-weight: 700;
             text-decoration: none; letter-spacing: 0.4em;
@@ -211,7 +270,143 @@
             </div>
         </section>
 
-        <div style="height: 200px;"></div>
+        <section class="section-faq" id="faq">
+            <div class="faq-header reveal">
+                <span class="faq-meta">QUESTIONS & ANSWERS</span>
+                <h2 class="faq-title">BEFORE YOU RUN</h2>
+                <p class="faq-desc">はじめての方へ、よくいただく質問をまとめました。</p>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">01</span>
+                            <span class="faq-q-text">URBAN FLOWとは、どのような施設ですか？</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                都市で働くクリエイターやビジネスパーソンのための<strong>ランニングを軸としたサードプレイス</strong>です。単なるジムやランニングステーションではなく、走ることで思考をクリアにし、クリエイティビティを再構築する——そんな体験を設計しています。中目黒・清澄白河の2拠点で展開中です。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">02</span>
+                            <span class="faq-q-text">ランニング初心者でも利用できますか？</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                もちろんです。URBAN FLOWが提供するのは<strong>速さや距離ではなく、走る体験の質</strong>です。5分のウォーキングから始める方もいらっしゃいます。ペースもルートもすべて自分のリズムで。スタッフが初回のオリエンテーションで丁寧にご案内します。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">03</span>
+                            <span class="faq-q-text">予約は必要ですか？ 料金体系を教えてください。</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                <strong>完全予約制</strong>です。静寂と快適さを保つため、各時間帯の利用人数を制限しています。<br>
+                                料金は<strong>ドロップイン ¥3,300</strong>（ロッカー・シャワー・タオル込み）、<strong>マンスリー ¥16,500/月</strong>（無制限利用）の2プランをご用意。初回体験は ¥1,100 で承っています。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">04</span>
+                            <span class="faq-q-text">持ち物は何が必要ですか？</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                <strong>ランニングシューズのみ</strong>お持ちください。ウェア・タオル・アメニティは施設に完備しています。仕事帰りに手ぶらで立ち寄れるよう設計しました。シューズの預かりサービス（マンスリー会員限定）もご利用いただけます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">05</span>
+                            <span class="faq-q-text">走った後にワークスペースは使えますか？</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                はい。各拠点に<strong>ポストラン・ワークラウンジ</strong>を併設しています。Wi-Fi・電源完備、スペシャルティコーヒーを1杯ご提供。走った直後の「思考がクリアな状態」でそのまま仕事に入れる——それがURBAN FLOWの設計思想です。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">06</span>
+                            <span class="faq-q-text">中目黒と清澄白河、どちらがおすすめですか？</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                <strong>中目黒</strong>は目黒川沿いの緑と静謐さが特徴。自然のリズムに身を委ねたい方に。<br>
+                                <strong>清澄白河</strong>は倉庫街の直線コースと現代アートの刺激。ストイックに集中したい方に。<br>
+                                マンスリー会員は<strong>両拠点を自由にご利用</strong>いただけます。その日の気分で使い分ける方が多いです。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item reveal">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <div class="faq-q-left">
+                            <span class="faq-number">07</span>
+                            <span class="faq-q-text">営業時間と定休日を教えてください。</span>
+                        </div>
+                        <span class="faq-toggle"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-a-inner">
+                            <p class="faq-a-text">
+                                <strong>6:00 – 22:00</strong>（最終受付 21:00）、年中無休で営業しています。早朝の静寂を走る方、仕事終わりの夜ランの方、それぞれのリズムに合わせてご利用ください。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-cta reveal">
+                <p class="contact-text">その他のご質問はお気軽にお問い合わせください</p>
+                <a href="#" class="contact-link">CONTACT US →</a>
+            </div>
+        </section>
+        <div style="height: 100px;"></div>
     </main>
 
     <a href="#" class="cta-btn" id="cta">RESERVE NOW</a>
@@ -256,6 +451,29 @@
             } else {
                 audio.muted = true;
                 icon.innerText = "MUSIC OFF";
+            }
+        }
+
+        // --- FAQ Toggle Function ---
+        function toggleFaq(el) {
+            const item = el.parentElement;
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+
+            // 他を閉じる処理（アコーディオン）
+            document.querySelectorAll('.faq-item.open').forEach(openItem => {
+                if (openItem !== item) {
+                    openItem.classList.remove('open');
+                    openItem.querySelector('.faq-answer').style.maxHeight = '0';
+                }
+            });
+
+            if (isOpen) {
+                item.classList.remove('open');
+                answer.style.maxHeight = '0';
+            } else {
+                item.classList.add('open');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
             }
         }
 
