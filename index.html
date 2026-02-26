@@ -172,7 +172,7 @@
         }
         .apparel-link:hover { background: var(--text-color); color: var(--bg-color); }
 
-        /* --- Apparel Modal (2階層目) --- */
+        /* --- Apparel Modal (2階層目: カタログ) --- */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(10, 10, 10, 0.98); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -261,9 +261,72 @@
         }
 
         .contact-cta { text-align: center; margin-top: 120px; }
-        .contact-text { color: var(--sub-text-color); font-size: 12px; margin-bottom: 30px; letter-spacing: 0.1em; }
-        .contact-link { display: inline-block; font-family: var(--font-en); font-size: 11px; letter-spacing: 0.3em; color: var(--text-color); text-decoration: none; border: 1px solid rgba(255,255,255,0.2); padding: 18px 48px; transition: background 0.4s var(--ease), color 0.4s var(--ease); }
+        .contact-link { display: inline-block; font-family: var(--font-en); font-size: 11px; letter-spacing: 0.3em; color: var(--text-color); text-decoration: none; border: 1px solid rgba(255,255,255,0.2); padding: 18px 48px; transition: background 0.4s var(--ease), color 0.4s var(--ease); cursor: pointer; }
         .contact-link:hover { background: var(--text-color); color: var(--bg-color); }
+
+        /* --- Contact Modal (2階層目: 問い合わせフォーム) --- */
+        #contact-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 9500; opacity: 0; visibility: hidden;
+            transition: opacity 0.6s var(--ease), visibility 0.6s;
+            display: flex; justify-content: center; align-items: center;
+            padding: 24px;
+        }
+        #contact-modal.active { opacity: 1; visibility: visible; }
+        
+        .contact-modal-content {
+            background-color: var(--bg-color); width: 100%; max-width: 600px;
+            padding: 60px 40px; border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s var(--ease) 0.2s, transform 0.8s var(--ease) 0.2s;
+            max-height: 90vh; overflow-y: auto;
+        }
+        #contact-modal.active .contact-modal-content { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 640px) { .contact-modal-content { padding: 50px 24px; } }
+
+        .contact-close {
+            position: absolute; top: 24px; right: 24px;
+            background: none; border: none; color: #fff;
+            font-family: var(--font-en); font-size: 10px; letter-spacing: 0.3em;
+            cursor: pointer; transition: opacity 0.3s;
+        }
+        .contact-close:hover { opacity: 0.5; }
+
+        .contact-title {
+            font-family: var(--font-en); font-weight: 400; font-size: clamp(20px, 3vw, 28px);
+            letter-spacing: 0.2em; margin-bottom: 40px; text-align: center;
+        }
+
+        .form-group { margin-bottom: 30px; }
+        .form-group label {
+            font-family: var(--font-en); font-size: 10px; color: var(--sub-text-color);
+            letter-spacing: 0.2em; display: block; margin-bottom: 12px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; background: none; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 0; color: #fff; font-size: 14px; font-family: var(--font-jp);
+            border-radius: 0; transition: border-color 0.3s;
+        }
+        .form-group textarea { line-height: 1.8; resize: vertical; min-height: 80px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #fff; }
+        
+        .form-group select {
+            appearance: none; -webkit-appearance: none; cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23aaa' d='M5 6.2 1.3 2.5 0 1.2.6.6l4.4 4.4L9.4.6l.6.6L6.3 2.5 5 3.7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 0 center; background-size: 10px 6px;
+        }
+        .form-group select option { background-color: var(--bg-color); color: #fff; }
+
+        .submit-btn-form {
+            width: 100%; background: none; border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; font-family: var(--font-en); font-size: 11px; letter-spacing: 0.4em;
+            padding: 20px 0; cursor: pointer; transition: background 0.4s var(--ease), color 0.4s var(--ease);
+            margin-top: 20px; display: block; text-align: center;
+        }
+        .submit-btn-form:hover { background: #fff; color: #000; }
 
         /* --- Floating CTA --- */
         .cta-btn {
@@ -495,8 +558,7 @@
             </div>
 
             <div class="contact-cta reveal">
-                <p class="contact-text">その他のご質問はお気軽にお問い合わせください</p>
-                <a href="#" class="contact-link">CONTACT US →</a>
+                <a class="contact-link" onclick="openContactModal(event)">CONTACT US →</a>
             </div>
         </section>
 
@@ -538,6 +600,37 @@
                     <a href="#" class="modal-buy-btn">ONLINE STORE</a>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="contact-modal">
+        <div class="contact-modal-content">
+            <button class="contact-close" onclick="closeContactModal()">CLOSE ✕</button>
+            <h2 class="contact-title">INQUIRY</h2>
+            <form onsubmit="event.preventDefault(); alert('お問い合わせを受け付けました。'); closeContactModal();">
+                <div class="form-group">
+                    <label for="name">NAME</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">SUBJECT</label>
+                    <select id="subject" name="subject">
+                        <option value="general">GENERAL INQUIRY</option>
+                        <option value="product">PRODUCT INFORMATION</option>
+                        <option value="size">SIZE & FIT</option>
+                        <option value="stock">STOCK / RESTOCK</option>
+                        <option value="order">SHIPPING & ORDER</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">MESSAGE</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn-form">SEND MESSAGE</button>
+            </form>
         </div>
     </div>
     <a href="#" class="cta-btn" id="cta">RESERVE NOW</a>
@@ -583,17 +676,44 @@
             }
         }
 
-        // --- Modal Functions (2階層目の開閉) ---
+        // --- Apparel Modal Functions ---
         function openApparelModal(e) {
             e.preventDefault();
             document.getElementById('apparel-modal').classList.add('active');
-            document.body.style.overflow = 'hidden'; // 背景のスクロールを止める
+            document.body.style.overflow = 'hidden';
         }
-
         function closeApparelModal() {
             document.getElementById('apparel-modal').classList.remove('active');
-            document.body.style.overflow = ''; // 背景のスクロールを再開
+            checkScrollRestoration();
         }
+
+        // --- Contact Modal Functions ---
+        function openContactModal(e) {
+            e.preventDefault();
+            document.getElementById('contact-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeContactModal() {
+            document.getElementById('contact-modal').classList.remove('active');
+            checkScrollRestoration();
+        }
+
+        // 両方のモーダルが閉じている場合のみスクロールを再開
+        function checkScrollRestoration() {
+            const apparelOpen = document.getElementById('apparel-modal').classList.contains('active');
+            const contactOpen = document.getElementById('contact-modal').classList.contains('active');
+            if (!apparelOpen && !contactOpen) {
+                document.body.style.overflow = '';
+            }
+        }
+
+        // モーダルの背景クリックで閉じる処理
+        window.addEventListener('click', (e) => {
+            const apparelModal = document.getElementById('apparel-modal');
+            const contactModal = document.getElementById('contact-modal');
+            if (e.target === apparelModal) closeApparelModal();
+            if (e.target === contactModal) closeContactModal();
+        });
 
         // --- FAQ Toggle Function ---
         function toggleFaq(el) {
